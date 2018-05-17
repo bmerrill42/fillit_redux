@@ -30,6 +30,7 @@ void print_piecearr(t_arr_list *node) {
     i = 0;
     while (i < 4){
       printf("%c", ((char**)node->piecearr)[j][i]);
+      //remove printf or this function it's just for printing out the 2d array in the node
       i++;
     }
     j++;
@@ -60,30 +61,14 @@ char **unstack_em(void *arr)
   return(ret);
 }
 void init_global() {
-  STACKARR;
+  char y[19][4][4] = STACKARR;
+  int i = 0;
   g_valid_pieces = new_node(NULL);
-  list_add(g_valid_pieces, unstack_em(&y0));
-  list_add(g_valid_pieces, unstack_em(&y1));
-  list_add(g_valid_pieces, unstack_em(&y2));
-  list_add(g_valid_pieces, unstack_em(&y3));
-  list_add(g_valid_pieces, unstack_em(&y4));
-  list_add(g_valid_pieces, unstack_em(&y5));
-  list_add(g_valid_pieces, unstack_em(&y6));
-  list_add(g_valid_pieces, unstack_em(&y7));
-  list_add(g_valid_pieces, unstack_em(&y8));
-  list_add(g_valid_pieces, unstack_em(&y9));
-  list_add(g_valid_pieces, unstack_em(&y10));
-  list_add(g_valid_pieces, unstack_em(&y11));
-  list_add(g_valid_pieces, unstack_em(&y12));
-  list_add(g_valid_pieces, unstack_em(&y13));
-  list_add(g_valid_pieces, unstack_em(&y14));
-  list_add(g_valid_pieces, unstack_em(&y15));
-  list_add(g_valid_pieces, unstack_em(&y16));
-  list_add(g_valid_pieces, unstack_em(&y17));
-  list_add(g_valid_pieces, unstack_em(&y18));
+  while (i < 19)
+    list_add(g_valid_pieces, unstack_em(&y[i++]));
 }
 
-/*testing main please ignore*/
+//testing main please ignore
 /* int main() { */
 /*   t_arr_list *temp; */
 /*   init_global(); */
