@@ -38,7 +38,7 @@ void print_piecearr(t_arr_list *node) {
   }
 }
 
-char **unstack_em(void *arr)
+char **unstack_em(char arr[19][4][4], int i)
 {
   char **ret;
   int x;
@@ -52,7 +52,7 @@ char **unstack_em(void *arr)
       ret[y] = (char*)ft_memalloc(sizeof(char) * 4);
       while (x < 4)
         {
-          ret[y][x] = VOID2ARR(arr)[y][x];
+          ret[y][x] = arr[i][y][x];
           x++;
         }
       y++;
@@ -65,7 +65,7 @@ void init_global() {
   int i = 0;
   g_valid_pieces = new_node(NULL);
   while (i < 19)
-    list_add(g_valid_pieces, unstack_em(&y[i++]));
+    list_add(g_valid_pieces, unstack_em(y, i++));
 }
 
 //testing main please ignore
