@@ -39,9 +39,13 @@
 # define RIGHT_T {{'#', '.', '.', '.'}, {'#', '#', '.', '.'}, {'#', '.', '.', '.'}, {'.', '.', '.', '.'}}
 # define T {{'#', '#', '#', '.'}, {'.', '#', '.', '.'}, {'.', '.', '.', '.'}, {'.', '.', '.', '.'}}
 
+# define VOID2ARR(X) (*((char (*)[4][4])X))
 
-
-
+typedef struct s_global_list {
+  void *piecearr;
+  struct s_piece *next;
+  struct s_piece *prev;
+} t_g_list;
 
 
 
