@@ -2,7 +2,7 @@
 
 t_arr_list *new_node(void *data) {
   t_arr_list *ret;
-  ret = (t_arr_list*)calloc(1, sizeof(t_arr_list));
+  ret = (t_arr_list*)ft_memalloc(sizeof(t_arr_list));
   ret->next = ret;
   ret->prev = ret;
   ret->piecearr = data;
