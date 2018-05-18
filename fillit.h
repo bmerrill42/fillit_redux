@@ -59,20 +59,21 @@
 # define X18 {'.','.','.','.'}}
 # define STACKARR {I, O, L, J, FLAT, L_180, RIGHT_L, LEFT_L, J_180, RIGHT_J,X19
 # define X19 LEFT_J, LEFT_S, S, RIGHT_Z, Z, T_180, LEFT_T, RIGHT_T, T}
+# define SUPERMAC	char	y[19][4][4] = STACKARR
 
 # define VOID2ARR(X) (*(char (*)[4][4])X)
 
-typedef struct		s_global_list {
-	void		*piecearr;
+typedef struct				s_global_list {
+	void					*piecearr;
 	struct s_global_list	*next;
 	struct s_global_list	*prev;
-}			t_arr_list;
+}							t_arr_list;
 
-static t_arr_list				*g_valid_pieces;
+static t_arr_list			*g_valid_pieces;
 
-void init_global();
-void print_piecearr(t_arr_list *node);
-void list_add(t_arr_list *head, void *data);
-t_arr_list *new_node(void *data);
+void						init_global();
+void						print_piecearr(t_arr_list *node);
+void						list_add(t_arr_list *head, void *data);
+t_arr_list					*new_node(void *data);
 
 #endif
