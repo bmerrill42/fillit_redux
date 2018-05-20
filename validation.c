@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   validation.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: agifford <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2018/05/18 16:39:50 by agifford          #+#    #+#             */
+/*   Updated: 2018/05/18 17:30:43 by agifford         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "fillit.h"
 
 int get_top(char **piece) {
@@ -34,6 +46,33 @@ int get_left(char **piece) {
   return(x);
 }
 
+
+char	*validation(char *tracker)
+{
+	int	i;
+	int	j;
+	t_arr_list	*temp;
+
+	i = 0;
+	j = 0;
+	temp = g_valid_piecesi->next;
+	while (temp->next)
+	{
+		while (i < 4)
+		{
+			while (j < 4)
+			{
+				while (tracker[i][j] != (char**)temp->piecearr)
+				{
+					temp->next = temp;
+					temp->prev = temp;
+				}
+				j++;
+			}
+		}
+		
+
+					
 
 
 //testing mains
