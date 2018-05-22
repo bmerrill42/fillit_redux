@@ -248,8 +248,11 @@ int check_candidate(t_tracker *candidate, char **valid)
 
 //testing mains
 
+<<<<<<< HEAD
 <<<<<<< variant A
 >>>>>>> variant B
+=======
+>>>>>>> cea0e2a30f68f2912a508af018515ae45013f966
 //testing validation
 
 int main() {
@@ -319,7 +322,6 @@ int main() {
   /*   temp = temp->next; */
   /* } */
 }
-======= end
 
 
 //testing get top&&left
@@ -328,8 +330,8 @@ int main() {
 /*   char **ret; */
 /*   int x; */
 /*   int y; */
-/*   char arr[4][4] = {{'.','#','#','.'},                                  \ */
-/*                     {'#','#','.','.'},                                  \ */
+/*   char arr[4][4] = {{'.','.','.','.'},                                  \ */
+/*                     {'.','.','.','.'},                                  \ */
 /*                     {'.','.','#','#'},                                  \ */
 /*                     {'.','#','#','.'}}; */
 /*   t_arr_list test; */
