@@ -248,11 +248,6 @@ int check_candidate(t_tracker *candidate, char **valid)
 
 //testing mains
 
-<<<<<<< HEAD
-<<<<<<< variant A
->>>>>>> variant B
-=======
->>>>>>> cea0e2a30f68f2912a508af018515ae45013f966
 //testing validation
 
 int main() {
