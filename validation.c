@@ -248,6 +248,7 @@ int check_candidate(t_tracker *candidate, char **valid)
 
 //testing mains
 
+<<<<<<< HEAD
 <<<<<<< variant A
 >>>>>>> variant B
 //testing validation
@@ -263,6 +264,21 @@ int main() {
   t_arr_list *temp;
 
   x = 0;
+=======
+//testing validation
+
+int main() {
+	char **ret;
+	int x = 0;
+	int y = 0;
+	char arr[4][4] = {{'.','.','.','.'},                                  \
+					  {'.','.','.','.'},                                  \
+					  {'.','.','#','#'},                                  \
+					  {'.','#','#','.'}};
+	 t_arr_list *temp;
+
+	   x = 0;
+>>>>>>> 55047ac... validation stuff
   y = 0;
   ret = (char**)ft_memalloc((sizeof(char*) * 4));
   while (y < 4)
@@ -319,7 +335,6 @@ int main() {
   /*   temp = temp->next; */
   /* } */
 }
-======= end
 
 
 //testing get top&&left
@@ -328,8 +343,8 @@ int main() {
 /*   char **ret; */
 /*   int x; */
 /*   int y; */
-/*   char arr[4][4] = {{'.','#','#','.'},                                  \ */
-/*                     {'#','#','.','.'},                                  \ */
+/*   char arr[4][4] = {{'.','.','.','.'},                                  \ */
+/*                     {'.','.','.','.'},                                  \ */
 /*                     {'.','.','#','#'},                                  \ */
 /*                     {'.','#','#','.'}}; */
 /*   t_arr_list test; */
