@@ -31,7 +31,8 @@ void		print_piecearr(t_arr_list *node)
 
 	i = 0;
 	j = 0;
-	if (!(unsigned int)node->piecearr)
+
+	if (!node->piecearr)
 		return ;
 	while (j < 4)
 	{
@@ -70,7 +71,7 @@ char		**unstack_em(char arr[19][4][4], int i)
 	return (ret);
 }
 
-void		init_global(void)
+t_arr_list *init_global(void)
 {
 	int		i;
 
@@ -79,6 +80,7 @@ void		init_global(void)
 	g_valid_pieces = new_node(NULL);
 	while (i < 19)
 		list_add(g_valid_pieces, unstack_em(y, i++));
+        return g_valid_pieces;
 }
 
 //testing main please ignore

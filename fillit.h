@@ -71,7 +71,7 @@ typedef struct				s_global_list {
 
 static t_arr_list			*g_valid_pieces;
 
-void						init_global();
+t_arr_list						*init_global();
 void						print_piecearr(t_arr_list *node);
 void						list_add(t_arr_list *head, void *data);
 t_arr_list					*new_node(void *data);
