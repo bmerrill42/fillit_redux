@@ -76,7 +76,7 @@ typedef struct s_tracker {
 **
 ** returns a pointer to an initialized tracker struct
 */
-t_tracker *construct(char **read_piece)
+t_tracker *construct_tracker(char **read_piece)
 {
   t_tracker *ret;
 
@@ -246,77 +246,197 @@ int check_candidate(t_tracker *candidate, char **valid)
   return 1;
 }
 
-//testing mains
-
-//testing validation
-
-int main() {
-  char **ret;
-  int x = 0;
-  int y = 0;
-  char arr[4][4] = {{'.','.','.','.'},                            \
-                    {'.','.','.','.'},                            \
-                    {'.','.','.','.'},                            \
-                    {'.','.','.','.'}};
+void reconstruct_global(t_arr_list *rejects)
+{
   t_arr_list *temp;
 
-  x = 0;
-  y = 0;
-  ret = (char**)ft_memalloc((sizeof(char*) * 4));
-  while (y < 4)
-    {
-      ret[y] = (char*)ft_memalloc(sizeof(char) * 4);
-      while (x < 4)
-        {
-          ret[y][x] = arr[y][x];
-          x++;
-        }
-      y++;
-      x = 0;
-    }
-
-  t_arr_list *rejects = new_node(NULL);
-
-  g_valid_pieces = init_global();
-
-  if (hashes(ret) != 4)
-    return(0);
-
-
-  //if validate returns null there's no matches otherwise I need to check the one piece thats returned
-  if (validate(construct(ret), rejects, 1) == NULL)
-    {
-      printf("INVALID\n");
-      return 0;
-    }
-  else if (check_candidate(construct(ret), ((char**)g_valid_pieces->next->piecearr)) == 0)
-    {
-      printf("INVALID\n");
-      return 0;
-    }
-  printf("candidates\n");
-  temp = g_valid_pieces->next;
-  while (temp != g_valid_pieces) {
-    print_piecearr(temp);
-    printf("\n");
-    temp = temp->next;
-  }
-
-  //must reconstruct for the next piece
   temp = rejects->prev;
   while (temp != rejects) {
     ((t_arr_list*)temp->piecearr)->next->prev = ((t_arr_list*)temp->piecearr);
     ((t_arr_list*)temp->piecearr)->prev->next = ((t_arr_list*)temp->piecearr);
     temp = temp->prev;
   }
-  /* printf("reconstructed\n"); */
-  /*   temp = g_valid_pieces->next; */
-  /* while (temp != g_valid_pieces) { */
-  /*   print_piecearr(temp); */
-  /*   printf("\n"); */
-  /*   temp = temp->next; */
-  /* } */
 }
+
+//testing mains
+
+char*read_file(char*filename)
+{
+    char *file = ft_strnew(0);
+  char buffer[22];
+  int fd = open(filename, O_RDONLY);
+
+  ft_memset(buffer, 0, 22);
+  while (read(fd, buffer, 21))
+    {
+      file = ft_strjoin(file, buffer);
+      ft_memset(buffer, 0, 22);
+    }
+  close(fd);
+  return (file);
+}
+
+int valid_chars(char*file_str)
+{
+  int i = 0;
+  while (file_str[i] != '\0')
+    {
+      if (file_str[i] != '.' && file_str[i] != '#' && file_str[i] != '\n')
+        return (0);
+      i++;
+    }
+  return (1);
+}
+
+//testing validation from 1D input
+int main(int argc, char **argv)
+{
+  char *file = read_file(argv[1]);
+  
+  printf("%s", file);
+
+  //verify that '.' '#' and '\n' is the whole alphabet
+  if (!valid_chars(file))
+    return (0);
+  printf("validchars pass\n");
+  //verify the file ends in a '\n'
+  if (file[ft_strlen(file)-1] != '\n')
+    return (0);
+  printf("file ends in \\n\n");
+
+
+  int i = 0;
+  while (file[i] != '\0')
+    {
+      if ((file[i] == '.'||file[i] == '#') && file[i+1] == '\n')
+        file[i+1] = 'n';
+      i++;
+    }
+
+  //check for 2+ adjancent '\n'
+  int newl = 0;
+  i = 0;
+  while (file[i] != '\0')
+    {
+      if (file[i] == '\n')
+        newl++;
+      if (file[i] != '\n')
+        newl = 0;
+      if (newl > 1)
+        return (0);
+      i++;
+    }
+
+  int split_size = 0;
+  i = 0;
+  while (file[i] !='\0')
+    {
+      if (file[i] == '\n')
+        split_size++;
+      i++;
+    }
+  split_size += file[ft_strlen(file)-1] == 'n';
+  //verify split_size isn't >26 otherwise bad input
+  if (split_size > 26)
+    return (0);
+  printf ("number of pieces is less than 27\n");
+  i = 0;
+  
+  char **splits = NULL;
+  t_arr_list *rejects = new_node(NULL);
+  t_arr_list *temp = NULL;
+  g_valid_pieces = init_global();
+  
+  splits = ft_strsplit(file, '\n');
+
+  //verify all values in splits are length 20 otherwise bad piece
+  while (i < split_size)
+    {
+      if (ft_strlen(splits[i]) != 20)
+        return (0);
+      i++;
+    }
+  printf("all pieces have 20 chars\n");
+  i = 0;
+  while (i < split_size)
+    {
+      printf("piece %d: %s\n", i, splits[i]);
+      temp = validate(construct_tracker(ft_strsplit(splits[i], 'n')), rejects, 1);
+      print_piecearr(temp);
+      reconstruct_global(rejects);
+      i++;
+    }
+}
+
+//testing validation
+
+/* int main() { */
+/*   char **ret; */
+/*   int x = 0; */
+/*   int y = 0; */
+/*   char arr[4][4] = {{'.','.','.','.'},                            \ */
+/*                     {'.','.','.','.'},                            \ */
+/*                     {'.','.','.','.'},                            \ */
+/*                     {'.','.','.','.'}}; */
+/*   t_arr_list *temp; */
+
+/*   x = 0; */
+/*   y = 0; */
+/*   ret = (char**)ft_memalloc((sizeof(char*) * 4)); */
+/*   while (y < 4) */
+/*     { */
+/*       ret[y] = (char*)ft_memalloc(sizeof(char) * 4); */
+/*       while (x < 4) */
+/*         { */
+/*           ret[y][x] = arr[y][x]; */
+/*           x++; */
+/*         } */
+/*       y++; */
+/*       x = 0; */
+/*     } */
+
+/*   t_arr_list *rejects = new_node(NULL); */
+
+/*   g_valid_pieces = init_global(); */
+
+/*   if (hashes(ret) != 4) */
+/*     return(0); */
+
+
+/*   //if validate returns null there's no matches otherwise I need to check the one piece thats returned */
+/*   if (validate(construct(ret), rejects, 1) == NULL) */
+/*     { */
+/*       printf("INVALID\n"); */
+/*       return 0; */
+/*     } */
+/*   else if (check_candidate(construct(ret), ((char**)g_valid_pieces->next->piecearr)) == 0) */
+/*     { */
+/*       printf("INVALID\n"); */
+/*       return 0; */
+/*     } */
+/*   printf("candidates\n"); */
+/*   temp = g_valid_pieces->next; */
+/*   while (temp != g_valid_pieces) { */
+/*     print_piecearr(temp); */
+/*     printf("\n"); */
+/*     temp = temp->next; */
+/*   } */
+
+/*   //must reconstruct for the next piece */
+/*   temp = rejects->prev; */
+/*   while (temp != rejects) { */
+/*     ((t_arr_list*)temp->piecearr)->next->prev = ((t_arr_list*)temp->piecearr); */
+/*     ((t_arr_list*)temp->piecearr)->prev->next = ((t_arr_list*)temp->piecearr); */
+/*     temp = temp->prev; */
+/*   } */
+/*   /\* printf("reconstructed\n"); *\/ */
+/*   /\*   temp = g_valid_pieces->next; *\/ */
+/*   /\* while (temp != g_valid_pieces) { *\/ */
+/*   /\*   print_piecearr(temp); *\/ */
+/*   /\*   printf("\n"); *\/ */
+/*   /\*   temp = temp->next; *\/ */
+/*   /\* } *\/ */
+/* } */
 
 
 //testing get top&&left
