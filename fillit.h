@@ -6,7 +6,7 @@
 /*   By: agifford <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/12 19:00:11 by agifford          #+#    #+#             */
-/*   Updated: 2018/05/18 17:23:25 by agifford         ###   ########.fr       */
+/*   Updated: 2018/05/23 15:04:58 by agifford         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,10 @@
 # define X18 {'.','.','.','.'}}
 # define STACKARR {I, O, L, J, FLAT, L_180, RIGHT_L, LEFT_L, J_180, RIGHT_J,X19
 # define X19 LEFT_J, LEFT_S, S, RIGHT_Z, Z, T_180, LEFT_T, RIGHT_T, T}
-# define SUPERMAC	char	y[19][4][4] = STACKARR
+# define SUPERMAC	char	y[19][4][4] = STACKARRi
+# define TET_X(c)	env->tet[c]->x
+# define TET_Y(b)	env->tet[b]->y
+# define TET(a)(b)(c)	env->tet[a]->tet[TET_Y(b)][TET_X(c)]
 
 # define VOID2ARR(X) (*(char (*)[4][4])X)
 
@@ -68,6 +71,24 @@ typedef struct				s_global_list {
 	struct s_global_list	*next;
 	struct s_global_list	*prev;
 }							t_arr_list;
+
+typedef	struct			s_tet
+{
+	char				**tet;
+	int					x;
+	int					y;
+}						t_tet;
+
+typedef	struct			s_env
+{
+	char				**working_area;
+	int					min_board;
+	int					row;
+	int					col;
+	t_tet				*tets;
+}						t_env;
+
+
 
 static t_arr_list			*g_valid_pieces;
 
