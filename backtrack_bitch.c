@@ -6,7 +6,7 @@
 /*   By: agifford <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/22 23:06:22 by agifford          #+#    #+#             */
-/*   Updated: 2018/05/24 23:28:16 by agifford         ###   ########.fr       */
+/*   Updated: 2018/05/25 15:37:37 by agifford         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,21 +63,25 @@ int	fuck_with_it(t_env	*env)
 		{
 			if (env->board[env->row][env->col] == '.')
 			{
-				if (can_put_piece(env))
-				{	
+				if (can_put_piece(env))	
+				{
 					put_piece(env);
-					if (env->cur_tet < env->num_tets - 1)
+					env->cur_tet++;
+					/*
+					** took away -1 from conditional and moved env->cur_tet up two lines
+					*/
+					if (env->cur_tet < env->num_tets )
 					{
-						env->cur_tet++;
-						fuck_with_it(env);
+						if (!fuck_with_it(env))
+							min_board++;
 					}
 					else 
-						return (1);
+						return (0);
 				}
 			}
 		}
 	}
-	return (0);
+	return (1);
 }
 
 int	double_fuck(t_env *env)
