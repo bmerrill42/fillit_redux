@@ -6,7 +6,7 @@
 /*   By: agifford <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/23 15:00:25 by agifford          #+#    #+#             */
-/*   Updated: 2018/05/23 22:54:22 by agifford         ###   ########.fr       */
+/*   Updated: 2018/05/24 23:34:13 by agifford         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,11 @@ t_env	*init_env(t_tet	*tets)
 	env->tets = tets;
 	env->row = 0;
 	env->col = 0;
-	while (tets[i])
-		i++;
-	env->num_tets = i;
+	env->cur_tet = 0;
+//	while (tets[i] != NULL)
+//		i++;
+//	env->num_tets = i;  hardcoded \/ for testing sake, need to fix!!!!!
+	env->num_tets = 1;
 	i = 1;
 	while (i * i < env->num_tets * 4)
 		i++;
@@ -34,10 +36,16 @@ t_env	*init_env(t_tet	*tets)
 	while (i < 12)
 	{
 		env->board[i] = ft_memalloc(sizeof(char) * 12);
+		ft_memset(env->board[i], '.', 11);
 		i++;
 	}
 	return (env);
 }
+
+/*
+** Brett will pass in tets to init_tet after validation (as double array?), which will then pass to init_e**nv
+** How will I initialize x and y in t_env: in struct or in can_put_piece/
+*/
 
 t_tet	*init_tet(char	**tet)
 {

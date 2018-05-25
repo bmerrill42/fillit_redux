@@ -6,7 +6,7 @@
 /*   By: agifford <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/12 19:00:11 by agifford          #+#    #+#             */
-/*   Updated: 2018/05/23 15:04:58 by agifford         ###   ########.fr       */
+/*   Updated: 2018/05/24 23:28:46 by agifford         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,12 +59,10 @@
 # define X18 {'.','.','.','.'}}
 # define STACKARR {I, O, L, J, FLAT, L_180, RIGHT_L, LEFT_L, J_180, RIGHT_J,X19
 # define X19 LEFT_J, LEFT_S, S, RIGHT_Z, Z, T_180, LEFT_T, RIGHT_T, T}
-# define SUPERMAC	char	y[19][4][4] = STACKARRi
-# define TET_X(c)	env->tet[c]->x
-# define TET_Y(b)	env->tet[b]->y
-# define TET(a)(b)(c)	env->tet[a]->tet[TET_Y(b)][TET_X(c)]
-
-# define VOID2ARR(X) (*(char (*)[4][4])X)
+# define SUPERMAC	char	y[19][4][4] = STACKARR
+# define TET_X	env->tets[env->cur_tet].x
+# define TET_Y	env->tets[env->cur_tet].y
+# define TET	env->tets[env->cur_tet].tet[TET_Y][TET_X]
 
 typedef struct				s_global_list {
 	void					*piecearr;
@@ -72,29 +70,48 @@ typedef struct				s_global_list {
 	struct s_global_list	*prev;
 }							t_arr_list;
 
-typedef	struct			s_tet
+typedef	struct				s_tet
 {
-	char				**tet;
-	int					x;
-	int					y;
-}						t_tet;
+	char					**tet;
+	int						x;
+	int						y;
+}							t_tet;
 
-typedef	struct			s_env
+typedef	struct				s_env
 {
-	char				**working_area;
-	int					min_board;
-	int					row;
-	int					col;
-	t_tet				*tets;
-}						t_env;
+	char					**board;
+	int						min_board;
+	int						row;
+	int						col;
+	int						num_tets;
+	int						cur_tet;
+
+	t_tet					*tets;
+}							t_env;
 
 
 
 static t_arr_list			*g_valid_pieces;
 
-t_arr_list						*init_global();
+t_arr_list					*init_global();
 void						print_piecearr(t_arr_list *node);
 void						list_add(t_arr_list *head, void *data);
 t_arr_list					*new_node(void *data);
 
+int							can_put_piece(t_env *env);
+
+void						put_piece(t_env *env);
+
+int							fuck_with_it(t_env *env);
+
+int							double_fuck(t_env *env);
+
+t_env						*init_env(t_tet *tets);
+
+t_tet						*init_tet(char **tet);
+
+void						print_board(t_env *env);
+
+void						print_working_area(t_env *env);
 #endif
+
