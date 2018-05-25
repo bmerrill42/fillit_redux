@@ -345,6 +345,7 @@ int main(int argc, char **argv)
   char **splits = NULL;
   t_arr_list *rejects = new_node(NULL);
   t_arr_list *temp = NULL;
+  char **current_piece  = NULL;
   g_valid_pieces = init_global();
   
   splits = ft_strsplit(file, '\n');
@@ -360,9 +361,14 @@ int main(int argc, char **argv)
   i = 0;
   while (i < split_size)
     {
+      current_piece = ft_strsplit(splits[i], 'n');
       printf("piece %d: %s\n", i, splits[i]);
-      temp = validate(construct_tracker(ft_strsplit(splits[i], 'n')), rejects, 1);
+      if (hashes(current_piece) != 4)
+        return (0);
+      temp = validate(construct_tracker(current_piece), rejects, 1);
       print_piecearr(temp);
+      if (!check_candidate(construct_tracker(current_piece), temp->piecearr))
+        return (0);
       reconstruct_global(rejects);
       i++;
     }
