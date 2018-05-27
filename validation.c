@@ -174,21 +174,21 @@ void remove_matches(t_tracker *read_piece, t_arr_list *rejects)
   traverse = g_valid_pieces->next;
   while(traverse != g_valid_pieces)
     {
-    //remove all the unlike pieces
-    if  (((char**)traverse->piecearr)               \
-         [read_piece->y_hash - read_piece->top]     \
-         [read_piece->x_hash - read_piece->left]    \
-         !=                                         \
-         read_piece->candidate                      \
-         [read_piece->y_hash]                       \
-         [read_piece->x_hash])
-      {
-      list_add(rejects, traverse);
-      traverse->next->prev = traverse->prev;
-      traverse->prev->next = traverse->next;
+      //remove all the unlike pieces
+      if  (((char**)traverse->piecearr)               \
+           [read_piece->y_hash - read_piece->top]     \
+           [read_piece->x_hash - read_piece->left]    \
+           !=                                         \
+           read_piece->candidate                      \
+           [read_piece->y_hash]                       \
+           [read_piece->x_hash])
+        {
+          list_add(rejects, traverse);
+          traverse->next->prev = traverse->prev;
+          traverse->prev->next = traverse->next;
+        }
+      traverse = traverse->next;
     }
-    traverse = traverse->next;
-  }
 }
 
 /*
@@ -204,16 +204,16 @@ void remove_matches(t_tracker *read_piece, t_arr_list *rejects)
 ** returns either the head of the circular linked list or a pointer to the node
 ** that is most likely the piece
 */
-t_arr_list *validate(t_tracker *read_piece, t_arr_list *rejects, int hash_num)
+t_arr_list *list_validate(t_tracker *read_piece, t_arr_list *rejects, int hash_num)
 {
   if (g_valid_pieces->next == g_valid_pieces->prev)
     return (g_valid_pieces->next->piecearr == NULL \
             ? NULL                                 \
             : g_valid_pieces->next);
-    set_hash_pos(read_piece, hash_num);
-    remove_matches(read_piece, rejects);
-    hash_num++;
-    return(validate(read_piece, rejects, hash_num));
+  set_hash_pos(read_piece, hash_num);
+  remove_matches(read_piece, rejects);
+  hash_num++;
+  return(list_validate(read_piece, rejects, hash_num));
 }
 
 /*
@@ -260,9 +260,9 @@ void reconstruct_global(t_arr_list *rejects)
 
 //testing mains
 
-char*read_file(char*filename)
+char *read_file(char*filename)
 {
-    char *file = ft_strnew(0);
+  char *file = ft_strnew(0);
   char buffer[22];
   int fd = open(filename, O_RDONLY);
 
@@ -288,23 +288,7 @@ int valid_chars(char*file_str)
   return (1);
 }
 
-//testing validation from 1D input
-int main(int argc, char **argv)
-{
-  char *file = read_file(argv[1]);
-  
-  printf("%s", file);
-
-  //verify that '.' '#' and '\n' is the whole alphabet
-  if (!valid_chars(file))
-    return (0);
-  printf("validchars pass\n");
-  //verify the file ends in a '\n'
-  if (file[ft_strlen(file)-1] != '\n')
-    return (0);
-  printf("file ends in \\n\n");
-
-
+char *sanitize(char *file) {
   int i = 0;
   while (file[i] != '\0')
     {
@@ -312,10 +296,13 @@ int main(int argc, char **argv)
         file[i+1] = 'n';
       i++;
     }
+  return (file);
+}
 
-  //check for 2+ adjancent '\n'
+int double_newline_check(char *file) {
   int newl = 0;
-  i = 0;
+  int i = 0;
+
   while (file[i] != '\0')
     {
       if (file[i] == '\n')
@@ -326,9 +313,12 @@ int main(int argc, char **argv)
         return (0);
       i++;
     }
+  return (newl);
+}
 
+int count_pieces_from_str(char *file) {
   int split_size = 0;
-  i = 0;
+  int i = 0;
   while (file[i] !='\0')
     {
       if (file[i] == '\n')
@@ -336,42 +326,84 @@ int main(int argc, char **argv)
       i++;
     }
   split_size += file[ft_strlen(file)-1] == 'n';
-  //verify split_size isn't >26 otherwise bad input
-  if (split_size > 26)
-    return (0);
-  printf ("number of pieces is less than 27\n");
-  i = 0;
-  
-  char **splits = NULL;
-  t_arr_list *rejects = new_node(NULL);
-  t_arr_list *temp = NULL;
-  char **current_piece  = NULL;
-  g_valid_pieces = init_global();
-  
-  splits = ft_strsplit(file, '\n');
+  return (split_size);
+}
 
-  //verify all values in splits are length 20 otherwise bad piece
+int check_piece_length (char**splits, split_size) {
+  int i = 0;
+  
   while (i < split_size)
     {
       if (ft_strlen(splits[i]) != 20)
         return (0);
       i++;
     }
-  printf("all pieces have 20 chars\n");
-  i = 0;
+  return (1);
+}
+
+char  **pre_list_checks (char *file) {
+  char **splits;
+  char split_size;
+  
+  //verify that '.' '#' and '\n' is the whole alphabet
+  if (!valid_chars(file))
+    return (0);
+  //verify the file ends in a '\n'
+  if (file[ft_strlen(file)-1] != '\n')
+    return (0);
+  //sanitize newlines for strsplit
+  file = sanitize(file);
+  //check for 2+ adjancent '\n'
+  if (double_newline_check(file) != 1)
+    return (0);
+  //verify split_size isn't >26 otherwise bad input
+  split_size = count_pieces_from_str(file);
+  if (split_size > 26)
+    return (0);
+  //verify all values in splits are length 20 otherwise bad piece
+  splits = ft_strsplit(file, '\n');
+  if (!check_piece_length(splits, split_size))
+    return(0);
+  return (splits);
+}
+
+t_tet **build_tet_array(int split_size, char**splits, t_arr_list *rejects) {
+  int i = 0;
+  char **current_piece = NULL;
+  t_arr_list *temp = NULL;
+  t_tet **list = (t_tet**)ft_memalloc(sizeof(t_tet*) * (split_size + 1));
+  t_tracker *current_piece_tracker = NULL;
   while (i < split_size)
     {
       current_piece = ft_strsplit(splits[i], 'n');
-      printf("piece %d: %s\n", i, splits[i]);
+      current_piece_tracker = construct_tracker(current_piece);
       if (hashes(current_piece) != 4)
         return (0);
-      temp = validate(construct_tracker(current_piece), rejects, 1);
-      print_piecearr(temp);
-      if (!check_candidate(construct_tracker(current_piece), temp->piecearr))
+      temp = list_validate(current_piece_tracker, rejects, 1);
+      if (!check_candidate(current_piece_tracker, temp->piecearr))
         return (0);
+      list[i] = init_tet(temp->piecearr);
       reconstruct_global(rejects);
       i++;
     }
+  list[i] = NULL;
+  return (list);
+}
+
+t_tet **validate(char *file)
+{
+  t_arr_list *rejects = new_node(NULL);
+  t_tet **tet_array = NULL;
+  char **split_str = pre_list_checks(file);
+
+  if (split_str != NULL)
+    return (0);
+  
+  g_valid_pieces = init_global();
+
+  tet_array = build_tet_array(count_pieces_from_str(sanitize(file)), split_str, rejects);
+
+  return (tet_array);
 }
 
 //testing validation

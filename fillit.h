@@ -60,9 +60,9 @@
 # define STACKARR {I, O, L, J, FLAT, L_180, RIGHT_L, LEFT_L, J_180, RIGHT_J,X19
 # define X19 LEFT_J, LEFT_S, S, RIGHT_Z, Z, T_180, LEFT_T, RIGHT_T, T}
 # define SUPERMAC	char	y[19][4][4] = STACKARR
-# define TET_X	env->tets[env->cur_tet].x
-# define TET_Y	env->tets[env->cur_tet].y
-# define TET	env->tets[env->cur_tet].tet[TET_Y][TET_X]
+# define TET_X	env->tets[env->cur_tet]->x
+# define TET_Y	env->tets[env->cur_tet]->y
+# define TET	env->tets[env->cur_tet]->tet[TET_Y][TET_X]
 
 typedef struct				s_global_list {
 	void					*piecearr;

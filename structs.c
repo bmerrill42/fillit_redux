@@ -51,7 +51,7 @@ t_tet	*init_tet(char	**tet)
 {
 	t_tet	*tet_ptr;
 
-	tet_ptr = ft_memalloc(sizeof(*tet_ptr));
+	tet_ptr = ft_memalloc(sizeof(t_tet));
 	tet_ptr->x = 0;
 	tet_ptr->y = 0;
 	tet_ptr->tet = tet;
