@@ -6,7 +6,7 @@
 /*   By: agifford <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/22 23:06:22 by agifford          #+#    #+#             */
-/*   Updated: 2018/05/25 15:37:37 by agifford         ###   ########.fr       */
+/*   Updated: 2018/05/25 20:40:57 by agifford         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ int	fuck_with_it(t_env	*env)
 					if (env->cur_tet < env->num_tets )
 					{
 						if (!fuck_with_it(env))
-							min_board++;
+							env->min_board++;
 					}
 					else 
 						return (0);
