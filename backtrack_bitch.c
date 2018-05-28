@@ -6,7 +6,7 @@
 /*   By: agifford <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/22 23:06:22 by agifford          #+#    #+#             */
-/*   Updated: 2018/05/25 20:40:57 by agifford         ###   ########.fr       */
+/*   Updated: 2018/05/27 23:15:21 by agifford         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,9 @@ int	can_put_piece(t_env *env)
 		{
 			if (TET == '#')
 			{
-				if (((TET_X + env->col > env->min_board) ||
-						(TET_Y + env->row > env->min_board)) &&
-						env->board[env->row + TET_Y][env->col + TET_X] != '.')
+				if (((TET_X + env->col > env->min_board) &&
+						(TET_Y + env->row > env->min_board)) ||
+						ft_isalpha(env->board[env->row + TET_Y][env->col + TET_X]))
 					return (0);
 			}
 			TET_X++;
@@ -34,7 +34,7 @@ int	can_put_piece(t_env *env)
 	return (1);
 }	
 
-void	put_piece(t_env *env) 
+int	put_piece(t_env *env) 
 {
 	TET_Y = 0;
 	while (TET_Y < 4)
@@ -46,11 +46,41 @@ void	put_piece(t_env *env)
 			{
 				env->board[env->row + TET_Y][env->col + TET_X] =
 					env->cur_tet + 'A';
+				print_working_area(env);
+				ft_putchar('\n');
 			}
 			TET_X++;
 		}
 		TET_Y++;
 	}
+	return (1);
+}	
+
+void	animal_style(t_env	*env)
+{	
+	env->col = 0;
+	while (env->col < env->min_board)
+	{
+		if (!ft_isalpha(env->board[env->row][env->col]) && env->cur_tet < env->num_tets ) //add isalpha over '.'
+		{
+			if (can_put_piece(env))	
+				put_piece(env);
+			else
+				env->col++;
+				
+			if (env->cur_tet < env->num_tets)
+			{
+				if (!fuck_with_it(env))
+					env->min_board++;
+			}
+		else
+			return;
+				
+				print_working_area(env);
+				ft_putchar('\n');
+			}
+		}
+	env->cur_tet++;
 }	
 
 int	fuck_with_it(t_env	*env)
@@ -58,28 +88,11 @@ int	fuck_with_it(t_env	*env)
 	env->row = 0;
 	while (env->row < env->min_board)
 	{
-		env->col = 0;
-		while (env->col < env->min_board)
-		{
-			if (env->board[env->row][env->col] == '.')
-			{
-				if (can_put_piece(env))	
-				{
-					put_piece(env);
-					env->cur_tet++;
-					/*
-					** took away -1 from conditional and moved env->cur_tet up two lines
-					*/
-					if (env->cur_tet < env->num_tets )
-					{
-						if (!fuck_with_it(env))
-							env->min_board++;
-					}
-					else 
-						return (0);
-				}
-			}
-		}
+		animal_style(env);
+		/*
+		** took away -1 from conditional and moved env->cur_tet up two lines
+		*/
+env->row++;
 	}
 	return (1);
 }

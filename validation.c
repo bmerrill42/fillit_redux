@@ -6,7 +6,7 @@
 /*   By: agifford <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/18 16:39:50 by agifford          #+#    #+#             */
-/*   Updated: 2018/05/25 20:30:43 by agifford         ###   ########.fr       */
+/*   Updated: 2018/05/26 19:43:55 by agifford         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -329,7 +329,7 @@ int count_pieces_from_str(char *file) {
   return (split_size);
 }
 
-int check_piece_length (char**splits, split_size) {
+int check_piece_length (char**splits, int split_size) {
   int i = 0;
   
   while (i < split_size)
@@ -396,7 +396,7 @@ t_tet **validate(char *file)
   t_tet **tet_array = NULL;
   char **split_str = pre_list_checks(file);
 
-  if (split_str != NULL)
+  if (split_str == NULL)
     return (0);
   
   g_valid_pieces = init_global();

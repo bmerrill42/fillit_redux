@@ -39,12 +39,12 @@ void		print_piecearr(t_arr_list *node)
 		i = 0;
 		while (i < 4)
 		{
-			printf("%c", ((char**)node->piecearr)[j][i]);
+			//printf("%c", ((char**)node->piecearr)[j][i]);
 			//remove printf or this function it's just for printing out the 2d array in the node
 			i++;
 		}
 		j++;
-		printf("\n");
+//		printf("\n");
 	}
 }
 

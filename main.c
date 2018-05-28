@@ -6,18 +6,29 @@
 /*   By: agifford <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/24 23:14:16 by agifford          #+#    #+#             */
-/*   Updated: 2018/05/24 23:34:09 by agifford         ###   ########.fr       */
+/*   Updated: 2018/05/26 19:03:31 by agifford         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fillit.h"
 
-int		main()
+int		main(int argc, char **argv)
 {
-	t_tet	*tet;
+	t_tet	**tet;
 	t_env	*env;
-
-	tet = malloc(sizeof(*tet));
+	char	*dest = ft_strnew(0);
+	char	content[22];
+	int		fd;
+	
+	(void)argc;
+	fd = open(argv[1], O_RDONLY);
+	ft_bzero(content, 22);
+	while (read(fd, content, 22) != 0)
+	{
+		dest = ft_strjoin(dest, content); 
+		ft_bzero(content, 22);
+	}
+	tet = validate(dest);
 	env = init_env(tet);
 	double_fuck(env);
 	print_working_area(env);

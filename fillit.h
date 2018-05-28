@@ -6,7 +6,7 @@
 /*   By: agifford <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/12 19:00:11 by agifford          #+#    #+#             */
-/*   Updated: 2018/05/25 20:40:54 by agifford         ###   ########.fr       */
+/*   Updated: 2018/05/26 19:28:25 by agifford         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ typedef	struct				s_env
 	int						num_tets;
 	int						cur_tet;
 
-	t_tet					*tets;
+	t_tet					**tets;
 }							t_env;
 
 
@@ -100,18 +100,20 @@ t_arr_list					*new_node(void *data);
 
 int							can_put_piece(t_env *env);
 
-void						put_piece(t_env *env);
+int						put_piece(t_env *env);
 
 int							fuck_with_it(t_env *env);
 
 int							double_fuck(t_env *env);
 
-t_env						*init_env(t_tet *tets);
+t_env						*init_env(t_tet **tets);
 
 t_tet						*init_tet(char **tet);
 
 void						print_board(t_env *env);
 
 void						print_working_area(t_env *env);
+
+t_tet						**validate(char *file);
 #endif
 

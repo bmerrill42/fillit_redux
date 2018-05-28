@@ -6,7 +6,7 @@
 /*   By: agifford <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/24 22:58:40 by agifford          #+#    #+#             */
-/*   Updated: 2018/05/24 23:29:04 by agifford         ###   ########.fr       */
+/*   Updated: 2018/05/26 19:48:14 by agifford         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ void	print_working_area(t_env *env)
 			ft_putchar(env->board[i][j]);
 			j++;
 		}
+		ft_putchar('\n');
 		i++;
 	}
 }

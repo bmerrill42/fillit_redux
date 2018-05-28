@@ -6,13 +6,13 @@
 /*   By: agifford <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/23 15:00:25 by agifford          #+#    #+#             */
-/*   Updated: 2018/05/25 15:12:39 by agifford         ###   ########.fr       */
+/*   Updated: 2018/05/26 18:21:45 by agifford         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fillit.h"
 
-t_env	*init_env(t_tet	*tets)
+t_env	*init_env(t_tet	**tets)
 {
 	t_env	*env;
 	int		i;
@@ -23,10 +23,9 @@ t_env	*init_env(t_tet	*tets)
 	env->row = 0;
 	env->col = 0;
 	env->cur_tet = 0;
-//	while (tets[i] != NULL)
-//		i++;
-//	env->num_tets = i;  hardcoded \/ for testing sake, need to fix!!!!!
-	env->num_tets = 1;
+	while (tets[i] != NULL)
+		i++;
+	env->num_tets = i;  
 	i = 1;
 	while (i * i < env->num_tets * 4)
 		i++;
